@@ -8,6 +8,7 @@ import 'package:xiechen/model/grid_nav_model.dart';
 import 'package:xiechen/model/home_model.dart';
 import 'package:xiechen/widget/grid_nav.dart';
 import 'package:xiechen/widget/local_nav.dart';
+import 'package:xiechen/widget/sub_nav.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<CommonModel> localNavList;
   GridNavModel gridNavModel;
+  List<CommonModel> subNavList;
 
   HomeModel model;
 
@@ -63,6 +65,7 @@ class _HomePageState extends State<HomePage> {
         this.model = model;
         localNavList = model.localNavList;
         gridNavModel = model.gridNav;
+        subNavList = model.subNavList;
         resultString = json.encode(model.config);
       });
     } catch (e) {
@@ -112,6 +115,10 @@ class _HomePageState extends State<HomePage> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
                           child: GridNav(gridNavModel: gridNavModel),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+                          child: SubNav(subNavList: subNavList),
                         ),
                         Container(
                           height: 1800,

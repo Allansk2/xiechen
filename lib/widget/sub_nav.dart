@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:xiechen/model/common_model.dart';
-import 'package:xiechen/model/grid_nav_model.dart';
 import 'package:xiechen/widget/webview.dart';
 
-class LocalNav extends StatelessWidget {
-  final List<CommonModel> localNavList;
+class SubNav extends StatelessWidget {
+  final List<CommonModel> subNavList;
 
-  const LocalNav({Key key, @required this.localNavList}) : super(key: key);
+  const SubNav({Key key, @required this.subNavList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 64,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(6),
@@ -21,18 +19,31 @@ class LocalNav extends StatelessWidget {
   }
 
   _items(BuildContext context) {
-    if (localNavList == null) {
+    if (subNavList == null) {
       return null;
     }
 
     List<Widget> items = [];
-    localNavList.forEach((model) {
+    subNavList.forEach((model) {
       items.add(_item(context, model));
     });
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: items,
+    int separate = (subNavList.length / 2 + 0.5).toInt();
+
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: items.sublist(0, separate),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: items.sublist(separate, subNavList.length),
+          ),
+        )
+      ],
     );
   }
 
@@ -54,12 +65,15 @@ class LocalNav extends StatelessWidget {
             children: <Widget>[
               Image.network(
                 model.icon,
-                height: 32,
-                width: 32,
+                height: 18,
+                width: 18,
               ),
-              Text(
-                model.title,
-                style: TextStyle(fontSize: 12),
+              Padding(
+                padding: EdgeInsets.only(top: 3),
+                child: Text(
+                  model.title,
+                  style: TextStyle(fontSize: 12),
+                ),
               )
             ],
           ),
