@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:xiechen/dao/home_dao.dart';
+import 'package:xiechen/model/common_model.dart';
 import 'package:xiechen/model/home_model.dart';
 import 'package:xiechen/widget/grid_nav.dart';
+import 'package:xiechen/widget/local_nav.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,11 +14,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List _imageUrls = [
-    'http://pages.ctrip.com/commerce/promote/20180718/yxzy/img/640sygd.jpg',
-    'https://dimg04.c-ctrip.com/images/700u0r000000gxvb93E54_810_235_85.jpg',
-    'https://dimg04.c-ctrip.com/images/700c10000000pdili7D8B_780_235_57.jpg'
-  ];
+  List<CommonModel> localNavList;
+
+  HomeModel model;
 
   static const APPBAR_SCROLL_OFFSET = 200;
 
@@ -56,9 +56,11 @@ class _HomePageState extends State<HomePage> {
 //    });
 
     try {
-      HomeModel mode = await HomeDao.fetch();
+      HomeModel model = await HomeDao.fetch();
       setState(() {
-        resultString = json.encode(mode.config);
+        this.model = model;
+        localNavList = model.localNavList;
+        resultString = json.encode(model.config);
       });
     } catch (e) {
       setState(() {
@@ -70,6 +72,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xfff2f2f2),
         body: Stack(
       children: <Widget>[
         MediaQuery.removePadding(
@@ -88,16 +91,19 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       height: 300,
                       child: Swiper(
-                        itemCount: _imageUrls.length,
+                        itemCount: model != null ? model.bannerList.length : 0,
                         autoplay: true,
                         itemBuilder: (BuildContext context, int index) {
-                          return Image.network(_imageUrls[index],
-                              fit: BoxFit.fill);
+                          return Image.network(model.bannerList[index].icon,
+                              fit: BoxFit.cover);
                         },
                         pagination: SwiperPagination(),
                       ),
                     ),
-                    GridNav(gridNavModel: null, name: 'Allan'),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+                      child: LocalNav(localNavList: localNavList),
+                    ),
                     Container(
                       height: 1800,
                       child: ListTile(title: Text(resultString)),
