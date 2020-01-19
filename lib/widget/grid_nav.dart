@@ -20,9 +20,7 @@ class GridNav extends StatelessWidget {
       child: Column(
         children: _gridNavItems(context),
       ),
-    )
-
-      ;
+    );
   }
 
   _gridNavItems(BuildContext context) {
@@ -107,26 +105,26 @@ class GridNav extends StatelessWidget {
   _item(BuildContext context, CommonModel item, bool first) {
     BorderSide boderSide = BorderSide(width: 0.8, color: Colors.white);
 
-    return FractionallySizedBox(
-      widthFactor: 1,
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border(
-          left: boderSide,
-          bottom: first ? boderSide : BorderSide.none,
-        )),
-        child: _wrapGesture(
-            context,
-            Center(
+    return _wrapGesture(
+        context,
+        FractionallySizedBox(
+          widthFactor: 1,
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border(
+              left: boderSide,
+              bottom: first ? boderSide : BorderSide.none,
+            )),
+            child: Center(
               child: Text(
                 item.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
-            item),
-      ),
-    );
+          ),
+        ),
+        item);
   }
 
   _wrapGesture(BuildContext context, Widget widget, CommonModel model) {
